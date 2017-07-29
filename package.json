@@ -3,16 +3,22 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "engines":{
+  "engines": {
     "node": "8.2.1",
     "npm": "5.3.0"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "author": "Eric Nielsen",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.15.3"
+    "cookie-session": "^2.0.0-beta.2",
+    "express": "^4.15.3",
+    "mongoose": "^4.11.4",
+    "nodemon": "^1.11.0",
+    "passport": "^0.3.2",
+    "passport-google-oauth20": "^1.0.0"
   }
 }
