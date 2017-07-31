@@ -9,11 +9,10 @@ passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser((id, done) =>{
-  User.findById(id)
-    .then(user => {
-      done(null, user);
-    });
+passport.deserializeUser((id, done) => {
+  User.findById(id).then(user => {
+    done(null, user);
+  });
 });
 
 passport.use(new GoogleStrategy({
@@ -23,24 +22,20 @@ passport.use(new GoogleStrategy({
   callbackURL: '/auth/google/callback',
   proxy: true
 
-}, (accessToken, refreshToken, profile, done) => {
-  User.findOne({googleID: profile.id})
-    .then((existingUser) => {
-      //  existinUser is not null. Therefore, invoke the done method.
-      if (existingUser) {
-        console.log("User already exists");
-        done(null, existingUser);
-      } else {
-        // existingUser is null. Therefore, consturct a new user and persist it to DB.
-        console.log("adding new user")
-        // consturct a new instance of the mongoose user object
-        new User({googleID: profile.id})
-          // invoke save method to persist user into the database
-          .save()
-          // but, lets not invoke the done method until the user has infact been saved
-          .then(user => {
-            done(null, user);
-          });
-      }
-    });
+},
+async (accessToken, refreshToken, profile, done) => {
+  const existingUser = await User.findOne({googleID: profile.id});
+  //  existinUser is not null. Therefore, invoke the done method.
+  if (existingUser) {
+    console.log("User already exists");
+    done(null, existingUser);
+  } else {
+    // existingUser is null. Therefore, consturct a new user and persist it to DB.
+    console.log("adding new user");
+    // consturct a new instance of the mongoose user object
+    // invoke save method to persist user into the database
+    const user = await new User({googleID: profile.id}).save();
+    // but, lets not invoke the done method until the user has infact been saved
+      done(null, user);
+  }
 }));
