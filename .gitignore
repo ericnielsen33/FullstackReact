@@ -53,6 +53,8 @@ yarn-error.log*
 
 #private keys
 dev.js
+.env.development
+.env.production
 
 # Runtime data
 pids
